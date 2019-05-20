@@ -31,6 +31,7 @@ emmm 最近在入门JS 主要是看不懂网页的js就不知道Redirection是�
 话说根本就没人看我的代码好吧 哈哈哈
 Visual Studio Community在安装 等完了以后看看Visual C++的错误会不会再出现（不出现就万事大吉） 我就可以写我的Pyfiddler了 加油
 
-——5019/5/20 22:30
+——9102/5/20 22:30
 vs code安好了 “need c++ 14.0”的问题是解决了 但是在安装pypcap的时候 又报了error C1189 
 Google了一大顿并没有发现问题的解决方法 有空去Github提交一个issue看看有没有人管 [哭脸]
+PS 520快乐
