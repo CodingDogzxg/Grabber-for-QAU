@@ -35,3 +35,6 @@ Visual Studio Community在安装 等完了以后看看Visual C++的错误会不�
 vs code安好了 “need c++ 14.0”的问题是解决了 但是在安装pypcap的时候 又报了error C1189 
 Google了一大顿并没有发现问题的解决方法 有空去Github提交一个issue看看有没有人管 [哭脸]
 PS 520快乐
+
+——9102/5/30 14：15
+pypcap报错的原因大概是vs++ linker的猫病 这个就在我能力范围之外了 并且如果用造轮子的方法install的话 又会有cython解释的问题 貌似这个库跟win10不对付吧 玄学
