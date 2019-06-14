@@ -57,19 +57,19 @@ class Qiangke():
         self.session.get(self.pre_url2)
         self.session.get(self.pre_url3)
 
-
-    # 把验证码画在屏幕上汪
+    # 把验证码画在屏幕上
     def draw_verify_code(self):
 
+        # 拿到验证码的url的response
         self.session_response = self.session.get(self.verify_code_url)
 
-        # 把二进制的验证码扔到你的内存里
+        # 拿到的response里有content就是验证码 把二进制的验证码扔进你的内存里 然后再用PIL打开这个二进制内存文件 在show()之前不会显示出来
         self.b_ver_code = Image.open((BytesIO(self.session_response.content)))
 
-        # 多线程防卡死
+        # 多线程防卡死 target是目标函数 args是transfer到target函数里的变量
         self.t1 = Thread(target=self.display_verify_code, args=(self.b_ver_code,))
         self.t1.start()
-        self.verify_code = input('pleas input the verify code:')
+        self.verify_code = input('please input the verify code:')
 
         # 把cookies从请求头里提取出来
         self.cookie_t = self.session_response.headers['Set-Cookie'].split(';')[0].split("=")[1]
@@ -81,18 +81,18 @@ class Qiangke():
 
         self.session_get_response = self.session.get('http://jwglxt.qau.edu.cn/', headers=self.session_headers, cookies=self.cookies)
 
-    # 真丶画验证码
+    # 这是配合多线程 target的函数 image就是多线程里写的args
     def display_verify_code(self, image):
         image.show()
 
-    # 把你的账号密码加密的神奇代码
+    # 把你的账号密码加密的神奇代码 从网站的js分析以后抄来的
     def encoded_account_password(self):
         self.response = self.session.post(self.dog_code_url)
         self.code_response = self.response.content
 
         print(self.code_response)
 
-        self.user_account = input('your account:)
+        self.user_account = input('your account:')
         self.user_password = input('your password:')
 
         self.code = self.user_account + '%%%' + self.user_password
@@ -113,7 +113,7 @@ class Qiangke():
 
         print(self.encoded)
 
-    # 真丶登陆
+    # 实现登陆的函数
     def login(self):
 
         # 信息啊 当然要key-value扔给服务器啊
