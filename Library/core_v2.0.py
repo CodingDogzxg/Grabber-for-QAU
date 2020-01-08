@@ -120,7 +120,7 @@ class QK(ModifyWindow):
         self.filename = 'info.json'
 
         self.return_msg = messagebox.askquestion(title='使用前必读', message='这是一款完全开源的抢课软件 名曰抢苟\r'
-                                                                        + '仅供参考学习 请勿用来非法盈利\r'
+                                                                        + '仅供参考学习 禁止用来非法盈利\r'
                                                                         + '是否同意上述条件？')
 
         if not self.return_msg == 'yes':
@@ -153,7 +153,7 @@ class QK(ModifyWindow):
             self.t1.start()
             self.t2 = Thread(target=self.tcmd_login)
             self.t2.start()
-            self.Log_info.insert(1.0, 'Connecting...please wait...\n')
+            self.Log_info.insert(1.0, '登陆中 请稍后...\n')
             self.Login.update()
 
     # 下面的两个方法是多线程的target
@@ -360,9 +360,9 @@ class MyLabel(Label):
 class CheckNecessary:
 
     def __init__(self):
-        self.check_necessary()
-
-    def check_necessary(self):
+    #     self.check_necessary()
+    #
+    # def check_necessary(self):
         self.cna = Tk()
         self.cna.withdraw()
         self.r = messagebox.askokcancel('info', '一定要先连接VPN！ \r 请确认VPN连接完毕以后关闭此窗口！')
