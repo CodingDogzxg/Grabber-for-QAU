@@ -280,29 +280,34 @@ class QK(ModifyWindow):
         existence = path.exists("ver_info.zxg")
 
         if existence:
-            dir = path.abspath("ver_info.zxg")
-            # print(dir)
-
-            # 文件夹路径
-            zip_dir = dir[:-21]
-
-            cu = Update(dir, zip_dir, existence)
-            cu.check_update()
-            self.Log_info.insert(1.0, "{}\n".format(cu.r_t))
-            self.Log_info.update()
-
-            if cu.update_bore and cu.done:
-                self.Log_info.insert(1.0, "下载&解压完成 请打开temp文件夹并按指引操作\n")
+            local_info_dict = {version: "", time: ""}
+            with open("ver_info.zxg") as v_file:
+                local_info_list = v_file.read()[9:-9].split("#")
+                local_info_dict[version], local_info_dict[time] = local_info_list[0], local_info_list[1]
+            cu = Update()
+            if not cu.gotten_response:
+                self.Log_info.insert(1.0, "网页未响应，请检查网络连接并稍后再试\n")
                 self.Log_info.update()
-
-            if not cu.update_bore:
-                self.Log_info.insert(1.0, "已经是最新版 无需更新\n")
+            elif not cu.re_found:
+                self.Log_info.insert(1.0, "re未匹配到版本信息，请手动前往官网查看是否有更新\n")
                 self.Log_info.update()
+            else:
+                if cu.cloud_info_dict == local_info_dict:
+                    self.Log_info.insert(1.0, 're匹配版本成功，用时{}s'.format(cu.re_time_usage))
+                    self.Log_info.update()
+                    self.Log_info.insert(1.0, "与云端版本一致，无需更新\n")
+                    self.Log_info.update()
+                elif cu.cloud_info_dict[version] > local_info_dict[version] \
+                        or cu.cloud_info_dict[time] > local_info_dict[time]:
+                    upd = Tk()
+                    upd.withdraw()
+                    answer = messagebox.askokcancel('info', '程序有更新，是否前去下载？')
+                    if answer:
+                        open_new('https://codeload.github.com/CodingDogzxg/Grabber-for-QAU/zip/master')
 
-        if not existence:
-            self.Log_info.insert(1.0, "版本文件未找到\n")
+        else:
+            self.Log_info.insert(1.0, "版本信息文件未找到，请前往官网查看是否有更新\n")
             self.Log_info.update()
-
 # ----------------------------------------------------------------------------
 
 
