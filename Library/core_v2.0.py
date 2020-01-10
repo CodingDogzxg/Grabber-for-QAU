@@ -280,10 +280,10 @@ class QK(ModifyWindow):
         existence = path.exists("ver_info.zxg")
 
         if existence:
-            local_info_dict = {version: "", time: ""}
+            local_info_dict = {"version": "", "time": ""}
             with open("ver_info.zxg") as v_file:
                 local_info_list = v_file.read()[9:-9].split("#")
-                local_info_dict[version], local_info_dict[time] = local_info_list[0], local_info_list[1]
+                local_info_dict['version'], local_info_dict['time'] = local_info_list[0], local_info_list[1]
             cu = Update()
             if not cu.gotten_response:
                 self.Log_info.insert(1.0, "网页未响应，请检查网络连接并稍后再试\n")
@@ -293,12 +293,12 @@ class QK(ModifyWindow):
                 self.Log_info.update()
             else:
                 if cu.cloud_info_dict == local_info_dict:
-                    self.Log_info.insert(1.0, 're匹配版本成功，用时{}s'.format(cu.re_time_usage))
+                    self.Log_info.insert(1.0, 're匹配版本成功，用时{}s'.format(str(cu.re_time_usage)[:3]))
                     self.Log_info.update()
                     self.Log_info.insert(1.0, "与云端版本一致，无需更新\n")
                     self.Log_info.update()
-                elif cu.cloud_info_dict[version] > local_info_dict[version] \
-                        or cu.cloud_info_dict[time] > local_info_dict[time]:
+                elif cu.cloud_info_dict['version'] > local_info_dict['version'] \
+                        or cu.cloud_info_dict['time'] > local_info_dict['time']:
                     upd = Tk()
                     upd.withdraw()
                     answer = messagebox.askokcancel('info', '程序有更新，是否前去下载？')

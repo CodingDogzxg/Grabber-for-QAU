@@ -29,5 +29,6 @@ class Update:
                 self.cloud_info_dict['time'] = cloud_info[1]
                 time2 = time.time()
                 self.re_time_usage = time2 - time1
+                self.re_found = True
             except AttributeError:
                 self.re_found = False
