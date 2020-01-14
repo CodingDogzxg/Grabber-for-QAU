@@ -1,0 +1,1 @@
+print(len('<!DOCTYPE html PUBLIC'))
