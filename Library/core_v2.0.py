@@ -9,12 +9,12 @@ from os import system, path
 from webbrowser import open_new
 from Lib.qkcore import Qiangke
 from Lib.update import Update
-# from checkn import CheckNecessary
 import tkinter
 import PIL.Image, PIL.ImageTk
 import pyperclip
 import json
 import requests
+import time
 
 
 class ModifyWindow(Frame):
@@ -108,16 +108,14 @@ class ModifyWindow(Frame):
         self.Email.place(relx=0.476, rely=0.933, relwidth=0.089, relheight=0.044)
         self.Email.bind("<Button-1>", lambda e: open_new("mailto:qaucodingdog@163.com"))
 
-    # self.Log = Text(self.top)
-    # self.Log.place(relx=0.038, rely=0.576, relwidth=0.565, relheight=0.409)
-    # self.Log.update()
-
 
 class QK(ModifyWindow):
 
     def __init__(self, master=None):
         ModifyWindow.__init__(self, master)
         self.filename = 'info.json'
+
+        self.time_usage = 0
 
         self.return_msg = messagebox.askquestion(title='使用前必读', message='这是一款完全开源的抢课软件 名曰抢苟\r'
                                                                         + '仅供参考学习 禁止用来非法盈利\r'
@@ -172,9 +170,6 @@ class QK(ModifyWindow):
 
     def tcmd_login(self):
         account = self.ID.get()
-        password = self.PassWord.get()
-        # verify_code = self.vcodeVar.get()
-        # self.qk.encoded_account_password(account, password)
 
         self.data = {
             'USERNAME': '{}'.format(account),
@@ -195,10 +190,6 @@ class QK(ModifyWindow):
         self.V_Pic = Label(self.top, image=self.im)
         self.V_Pic.place(relx=0.1, rely=0.429, relwidth=0.097, relheight=0.053)
 
-    # 检测复选框是否被选中 决定是否引用库
-    # def check_ckbutton(self, checkbutton_name):
-    # 	if checkbutton_name.get() == 1:
-    # 		import json
 
     # 粘贴剪切板内容到StringVar
     def paste_info(self):
@@ -213,13 +204,6 @@ class QK(ModifyWindow):
             messagebox.showwarning(title='Warning', message='Location长度不符合预期是不能通过此方法登录的')
             self.LocationvalVar.set(value=self.paste_information)
 
-    # 赋值Location
-    # def def_location(self):
-    #     self.location_value = self.LocationvalVar.get()
-    #     if self.location_value != '':
-    #         messagebox.showinfo(title='information', message='赋值成功！')
-    #     elif self.location_value == '':
-    #         messagebox.showwarning(title='warning', message='不能留空Location 否则无法通过Location方式登陆')
 
     def log_location(self):
         location_url = self.LocationvalVar.get()
@@ -270,9 +254,6 @@ class QK(ModifyWindow):
             self.Log_info.insert(1.0, '图片资源未找到\n')
             self.Log_info.update()
 
-# --E-mail me method--
-#     def browser(self):
-#         open_new("http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=qaucodingdog@163.com")
 
 # ------------------------------Check for update------------------------------
     def update_check(self):
@@ -284,7 +265,10 @@ class QK(ModifyWindow):
             with open("ver_info.zxg") as v_file:
                 local_info_list = v_file.read()[9:-9].split("#")
                 local_info_dict['version'], local_info_dict['time'] = local_info_list[0], local_info_list[1]
+            time1 = time.time()
             cu = Update()
+            time2 = time.time()
+            self.time_usage = '{:.1f}'.format(time2 - time1)
             if not cu.gotten_response:
                 self.Log_info.insert(1.0, "网页未响应，请检查网络连接并稍后再试\n")
                 self.Log_info.update()
@@ -292,9 +276,9 @@ class QK(ModifyWindow):
                 self.Log_info.insert(1.0, "re未匹配到版本信息，请手动前往官网查看是否有更新\n")
                 self.Log_info.update()
             else:
+                self.Log_info.insert(1.0, 're匹配版本成功，用时{}s\n'.format(self.time_usage))
+                self.Log_info.update()
                 if cu.cloud_info_dict == local_info_dict:
-                    self.Log_info.insert(1.0, 're匹配版本成功，用时{}s'.format(str(cu.re_time_usage)[:3]))
-                    self.Log_info.update()
                     self.Log_info.insert(1.0, "与云端版本一致，无需更新\n")
                     self.Log_info.update()
                 elif cu.cloud_info_dict['version'] > local_info_dict['version'] \
@@ -365,9 +349,6 @@ class MyLabel(Label):
 class CheckNecessary:
 
     def __init__(self):
-    #     self.check_necessary()
-    #
-    # def check_necessary(self):
         self.cna = Tk()
         self.cna.withdraw()
         self.r = messagebox.askokcancel('info', '一定要先连接VPN！ \r 请确认VPN连接完毕以后关闭此窗口！')
@@ -378,7 +359,6 @@ class CheckNecessary:
 if __name__ == '__main__':
 
     cn = CheckNecessary()
-    # print(cn.r)
     if cn.r:
 
         # 销毁窗口
