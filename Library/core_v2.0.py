@@ -9,6 +9,7 @@ from os import system, path
 from webbrowser import open_new
 from Lib.qkcore import Qiangke
 from Lib.update import Update
+from Lib.score import Score
 import tkinter
 import PIL.Image, PIL.ImageTk
 import pyperclip
@@ -112,6 +113,10 @@ class ModifyWindow(Frame):
         self.Check_ud.place(relx=0.387, rely=0.933, relwidth=0.089, relheight=0.044)
         self.Check_ud.bind("<Button-1>", lambda d: self.update_check())
 
+        self.Score = Button(self.top, text='成绩查询', command=self.check_score)
+        self.Score['state'] = 'disable'
+        self.Score.place(relx=0.5, rely=0.625, relwidth=0.15, relheight=0.09)
+
 
 class QK(ModifyWindow):
 
@@ -188,6 +193,11 @@ class QK(ModifyWindow):
 
             self.EnterLct['state'] = 'disable'
 
+    def check_score(self):
+        score = Score()
+        score_res = self.qk.session_score(score.score_url, data=score.data)
+        score.replace_css(score_res.text)
+
     def refresh_cmd(self):
         self.qk.get_verify_code()
         self.photo = PIL.Image.open(self.qk.b_ver_code)
@@ -208,7 +218,6 @@ class QK(ModifyWindow):
             messagebox.showwarning(title='Warning', message='Location长度不符合预期是不能通过此方法登录的')
             self.LocationvalVar.set(value=self.paste_information)
 
-
     def log_location(self):
         location_url = self.LocationvalVar.get()
         self.qk.log_location(location_url)
@@ -217,6 +226,7 @@ class QK(ModifyWindow):
         self.Login.update()
         if self.log_successfully:
             self.Login['state'] = 'disable'
+            self.Score['state'] = 'normal'
 
     # 检测是否登录成功
     def check_logsuc(self):
@@ -225,6 +235,7 @@ class QK(ModifyWindow):
             for line in self.logsuc_info:
                 if '	<title>学生个人中心</title>' in line:
                     self.log_successfully = True
+                    self.Score['state'] = 'normal'
                     self.Log_info.insert(1.0, '登陆成功 \n')
                     self.Log_info.update()
                     break
