@@ -27,7 +27,6 @@ class ModifyWindow(Frame):
         self.createWidgets()
         self.log_successfully = False
 
-
     def createWidgets(self):
         self.top = self.winfo_toplevel()
 
@@ -43,9 +42,6 @@ class ModifyWindow(Frame):
         self.LocationvalVar = StringVar(value='')
         self.Location = Entry(self.top, textvariable=self.LocationvalVar)
         self.Location.place(relx=0, rely=0.053, relwidth=0.389, relheight=0.053)
-
-        self.Paste = Button(self.top, text='检测更新', command=self.update_check)
-        self.Paste.place(relx=0.6, rely=0.138, relwidth=0.129, relheight=0.09)
 
         self.Paste = Button(self.top, text='粘贴剪切板', command=self.paste_info)
         self.Paste.place(relx=0.0436, rely=0.138, relwidth=0.129, relheight=0.09)
@@ -78,6 +74,10 @@ class ModifyWindow(Frame):
 
         self.Log_info = Text(self.top)
         self.Log_info.place(relx=0, rely=0.747, relwidth=0.565, relheight=0.23)
+        scrollbar = Scrollbar(self.Log_info, cursor='arrow', orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        scrollbar.config(command=self.Log_info.yview)
+        self.Log_info['yscrollcommand'] = scrollbar.set  # 绑定滑块和LOG的位置
         self.Log_info.update()
 
         # -----------------------------------------------------------------------
@@ -107,6 +107,10 @@ class ModifyWindow(Frame):
         self.Email = Label(self.top, text='联系作者', fg='blue', bg='white', cursor='hand2')
         self.Email.place(relx=0.476, rely=0.933, relwidth=0.089, relheight=0.044)
         self.Email.bind("<Button-1>", lambda e: open_new("mailto:qaucodingdog@163.com"))
+
+        self.Check_ud = Label(self.top, text='检查更新', fg='blue', bg='white', cursor='hand2')
+        self.Check_ud.place(relx=0.387, rely=0.933, relwidth=0.089, relheight=0.044)
+        self.Check_ud.bind("<Button-1>", lambda d: self.update_check())
 
 
 class QK(ModifyWindow):
@@ -170,6 +174,7 @@ class QK(ModifyWindow):
 
     def tcmd_login(self):
         account = self.ID.get()
+        password = self.PassWord.get()
 
         self.data = {
             'USERNAME': '{}'.format(account),
@@ -189,7 +194,6 @@ class QK(ModifyWindow):
         self.im = PIL.ImageTk.PhotoImage(self.photo)
         self.V_Pic = Label(self.top, image=self.im)
         self.V_Pic.place(relx=0.1, rely=0.429, relwidth=0.097, relheight=0.053)
-
 
     # 粘贴剪切板内容到StringVar
     def paste_info(self):
