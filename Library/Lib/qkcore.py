@@ -19,7 +19,7 @@ class Qiangke:
         self.headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36',
         }
-    
+
     def login(self, data):
         self.main_response = self.session.get(self.url, headers=self.headers)
         # print(main_response.text)
@@ -35,3 +35,7 @@ class Qiangke:
 
     def log_location(self, url):
         self.after_response = self.session.get(url)
+
+    def session_score(self, url, data):
+        res = self.session.post(url, data, headers=self.headers)
+        return res
