@@ -1,9 +1,8 @@
-感谢使用本汪的抢苟，使用及传播完全免费，对其进行修改时请注意根据GPLv2协定开源相关源代码
+感谢使用本汪的抢苟，使用及传播完全免费，使用时请注意行为符合No License证书要求
 
 ============如何启动============
 # windows用户：
-点击Grabber.exe --带有traceback功能
-或者点击start.bat --不带有traceback功能
+打开Grabber.exe/start.bat
 
 Linux/ OS X / Mac OS 用户：
 对不起 本汪没有多余的精力对除Windows下抢苟进行维护
