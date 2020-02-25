@@ -107,7 +107,7 @@ class ModifyWindow(Frame):
 
         self.Email = Label(self.top, text='联系作者', fg='blue', bg='white', cursor='hand2')
         self.Email.place(relx=0.476, rely=0.933, relwidth=0.089, relheight=0.044)
-        self.Email.bind("<Button-1>", lambda e: open_new("mailto:qaucodingdog@163.com"))
+        self.Email.bind("<Button-1>", lambda e: open_new("mailto:qaucodingdog@gmail.com"))
 
         self.Check_ud = Label(self.top, text='检查更新', fg='blue', bg='white', cursor='hand2')
         self.Check_ud.place(relx=0.387, rely=0.933, relwidth=0.089, relheight=0.044)
