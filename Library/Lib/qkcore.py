@@ -41,7 +41,7 @@ class Qiangke:
         res = self.session.get(url)
         return res
 
-    def session_score1(self, url, period, data):
+    def session_score(self, url, period, data):
         data['kksj'] = period
         res = self.session.post(url, data, headers=self.headers)
         return res

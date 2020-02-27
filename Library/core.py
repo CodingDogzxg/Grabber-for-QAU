@@ -129,9 +129,8 @@ class QK(ModifyWindow):
 
         self.time_usage = 0
 
-        self.return_msg = messagebox.askquestion(title='使用前必读', message='这是一款完全开源的抢课软件 名曰抢苟\r'
-                                                                        + '仅供参考学习 禁止用来非法盈利\r'
-                                                                        + '是否同意上述条件？')
+        self.start_message = '这是一款完全开源的抢课软件 名曰抢苟\r仅供参考学习 禁止用来非法盈利\r是否同意上述条件？'
+        self.return_msg = messagebox.askquestion(title='使用前必读', message=self.start_message)
 
         if not self.return_msg == 'yes':
             top.destroy()
@@ -215,7 +214,7 @@ class QK(ModifyWindow):
 
         def post_query():
             period = Query.get()
-            score_res = self.qk.session_score1(score.score_url, period=period, data=score.data)
+            score_res = self.qk.session_score(score.score_url, period=period, data=score.data)
             score.replace_css(score_res.text)
             cmb_master.destroy()
 
