@@ -36,6 +36,13 @@ class Qiangke:
     def log_location(self, url):
         self.after_response = self.session.get(url)
 
-    def session_score(self, url, data):
+# ---------------------------------成绩查询---------------------------------
+    def session_check_score_query(self, url):
+        res = self.session.get(url)
+        return res
+
+    def session_score1(self, url, period, data):
+        data['kksj'] = period
         res = self.session.post(url, data, headers=self.headers)
         return res
+# ------------------------------------------------------------------------
