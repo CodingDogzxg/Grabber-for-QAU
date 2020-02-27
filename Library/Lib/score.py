@@ -3,9 +3,10 @@ import webbrowser
 
 class Score:
     def __init__(self):
+        self.query_url = 'http://jwglxt.qau.edu.cn/jsxsd1/kscj/cjcx_query'
         self.score_url = 'http://jwglxt.qau.edu.cn/jsxsd1/kscj/cjcx_list'
         self.data = {
-            'kksj': '2019-2020-1',
+            'kksj': '',
             'kcxz': '',
             'kcmc': '',
             'xsfs': 'all',
