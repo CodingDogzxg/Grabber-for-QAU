@@ -4,9 +4,11 @@
 
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 from threading import Thread
 from os import system, path
 from webbrowser import open_new
+from lxml import etree
 from Lib.qkcore import Qiangke
 from Lib.update import Update
 from Lib.score import Score
@@ -23,7 +25,8 @@ class ModifyWindow(Frame):
     # 此类仅完成界面的绘制 具体时间执行代码在QK类以及重构模块core的Qiangke类里
     def __init__(self, master=None):
         Frame.__init__(self, master)
-        self.master.title('Grabber for QAU By CodingDog_zxg Ver2.3')
+        self.master_title = 'Grabber for QAU By CodingDog_zxg Ver2.3'
+        self.master.title(self.master_title)
         self.master.geometry('640x480')
         self.createWidgets()
         self.log_successfully = False
@@ -190,13 +193,36 @@ class QK(ModifyWindow):
         self.check_logsuc()
         if self.log_successfully:
             self.Paste['state'] = 'disable'
-
             self.EnterLct['state'] = 'disable'
 
     def check_score(self):
         score = Score()
-        score_res = self.qk.session_score(score.score_url, data=score.data)
-        score.replace_css(score_res.text)
+        score_query_response = self.qk.session_check_score_query(score.query_url)
+        score_query_xml = etree.HTML(score_query_response.content)
+        score_query_str = score_query_xml.xpath('string(//*[@id="kksj"])')
+        score_query_list = str(score_query_str).replace('\t', '').replace('\n', '').split('\r\r')[1:-1]
+
+        cmb_master = Tk()
+        cmb_master.geometry('240x60')
+        cmb_master.title('选择学期')
+        cmb_master.resizable(0, 0)
+        cmb_master.iconbitmap('1.ico')
+
+        Query = ttk.Combobox(cmb_master)
+        Query['value'] = score_query_list
+        Query.current(0)
+        Query.pack()
+
+        def post_query():
+            period = Query.get()
+            score_res = self.qk.session_score1(score.score_url, period=period, data=score.data)
+            score.replace_css(score_res.text)
+            cmb_master.destroy()
+
+        Query_Confirm = Button(cmb_master, text='确定', command=post_query)
+        Query_Confirm.place(relx=0.25, rely=0.45, relwidth=0.5, relheight=0.5)
+
+        cmb_master.mainloop()
 
     def refresh_cmd(self):
         self.qk.get_verify_code()
@@ -221,29 +247,45 @@ class QK(ModifyWindow):
     def log_location(self):
         location_url = self.LocationvalVar.get()
         self.qk.log_location(location_url)
+        self.Log_info.insert(1.0, '登陆中 请稍后...\n')
         self.check_logsuc()
-        self.Log_info.insert(1.0, 'Connecting...please wait...\n')
-        self.Login.update()
+        # self.Login.update()
         if self.log_successfully:
             self.Login['state'] = 'disable'
             self.Score['state'] = 'normal'
 
     # 检测是否登录成功
     def check_logsuc(self):
+        # try:
+        #     self.logsuc_info = self.qk.after_response.text.split('\n')
+        #     for line in self.logsuc_info:
+        #         if '	<title>学生个人中心</title>' in line:
+        #             self.log_successfully = True
+        #             self.Score['state'] = 'normal'
+        #             self.Log_info.insert(1.0, '登陆成功 \n')
+        #             self.Log_info.update()
+        #             break
+        #         elif '<title>青岛农业大学综合教务管理系统-强智科技</title> ' in line:
+        #             self.Log_info.insert(1.0, '登陆失败 请检查账户密码无误后重试 \n')
+        #             self.Log_info.update()
+        #             break
+        # except NameError:
+        #     self.Log_info.insert(1.0, '未知原因登陆失败，请重试\n')
+        #     self.Log_info.update()
+
         try:
-            self.logsuc_info = self.qk.after_response.text.split('\n')
-            for line in self.logsuc_info:
-                if '	<title>学生个人中心</title>' in line:
-                    self.log_successfully = True
-                    self.Score['state'] = 'normal'
-                    self.Log_info.insert(1.0, '登陆成功 \n')
-                    self.Log_info.update()
-                    break
-                elif '<title>青岛农业大学综合教务管理系统-强智科技</title> ' in line:
-                    self.Log_info.insert(1.0, '登陆失败 请检查账户密码无误后重试 \n')
-                    self.Log_info.update()
-                    break
-        except NameError:
+            xml_html = etree.HTML(self.qk.after_response.content.decode())
+            self.user_name = xml_html.xpath('string(//*[@id="Top1_divLoginName"])')
+            if self.user_name:
+                self.log_successfully = True
+                self.Score['state'] = 'normal'
+                self.master.title(self.master_title + '   {} 你好'.format(self.user_name))
+                self.Log_info.insert(1.0, '登陆成功 \n')
+                self.Log_info.update()
+        except UnicodeDecodeError:
+            self.Log_info.insert(1.0, '登陆失败 请检查账户密码无误后重试 \n')
+            self.Log_info.update()
+        except Exception:
             self.Log_info.insert(1.0, '未知原因登陆失败，请重试\n')
             self.Log_info.update()
 
@@ -287,11 +329,11 @@ class QK(ModifyWindow):
             if not cu.gotten_response:
                 self.Log_info.insert(1.0, "网页未响应，请检查网络连接并稍后再试\n")
                 self.Log_info.update()
-            elif not cu.re_found:
-                self.Log_info.insert(1.0, "re未匹配到版本信息，请手动前往官网查看是否有更新\n")
+            elif not cu.xpath_match:
+                self.Log_info.insert(1.0, "xpath未匹配到版本信息，请手动前往官网查看是否有更新\n")
                 self.Log_info.update()
             else:
-                self.Log_info.insert(1.0, 're匹配版本成功，用时{}s\n'.format(self.time_usage))
+                self.Log_info.insert(1.0, 'xpath匹配版本成功，用时{}s\n'.format(self.time_usage))
                 self.Log_info.update()
                 if cu.cloud_info_dict == local_info_dict:
                     self.Log_info.insert(1.0, "与云端版本一致，无需更新\n")
