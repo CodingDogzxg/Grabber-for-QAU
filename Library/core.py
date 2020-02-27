@@ -116,9 +116,20 @@ class ModifyWindow(Frame):
         self.Check_ud.place(relx=0.387, rely=0.933, relwidth=0.089, relheight=0.044)
         self.Check_ud.bind("<Button-1>", lambda d: self.update_check())
 
+        self.Classes = Button(self.top, text='课表下载', command=self.download_classes)
+        self.Classes['state'] = 'disable'
+        self.Classes.place(relx=0.61, rely=0.747, relwidth=0.15, relheight=0.09)
+
+        self.Evaluate = Button(self.top, text='一键评教', command=self.auto_evaluation)
+        self.Evaluate['state'] = 'disable'
+        self.Evaluate.place(relx=0.805, rely=0.747, relwidth=0.15, relheight=0.09)
+
         self.Score = Button(self.top, text='成绩查询', command=self.check_score)
         self.Score['state'] = 'disable'
-        self.Score.place(relx=0.5, rely=0.625, relwidth=0.15, relheight=0.09)
+        self.Score.place(relx=0.61, rely=0.8735, relwidth=0.15, relheight=0.09)
+
+        self.Author = Button(self.top, text='关于作者', command=self.about_author)
+        self.Author.place(relx=0.805, rely=0.8735, relwidth=0.15, relheight=0.09)
 
 
 class QK(ModifyWindow):
@@ -349,6 +360,15 @@ class QK(ModifyWindow):
             self.Log_info.insert(1.0, "版本信息文件未找到，请前往官网查看是否有更新\n")
             self.Log_info.update()
 # ----------------------------------------------------------------------------
+
+    def about_author(self):
+        pass
+
+    def download_classes(self):
+        pass
+
+    def auto_evaluation(self):
+        pass
 
 
 class MyLabel(Label):
