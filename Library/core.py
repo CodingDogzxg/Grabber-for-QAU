@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # author: QAUCodingDog
 
@@ -138,6 +138,7 @@ class QK(ModifyWindow):
         ModifyWindow.__init__(self, master)
         self.filename = 'info.json'
 
+        self.refresh_count = 0
         self.time_usage = 0
 
         self.start_message = '这是一款完全开源的抢课软件 名曰抢苟\r仅供参考学习 禁止用来非法盈利\r是否同意上述条件？'
@@ -173,7 +174,7 @@ class QK(ModifyWindow):
             self.t1.start()
             self.t2 = Thread(target=self.tcmd_login)
             self.t2.start()
-            self.Log_info.insert(1.0, '登陆中 请稍后...\n')
+            self.Log_info.insert(1.0, '登陆中 请稍候...\n')
             self.Login.update()
 
     # 下面的两个方法是多线程的target
@@ -240,6 +241,10 @@ class QK(ModifyWindow):
         self.im = PIL.ImageTk.PhotoImage(self.photo)
         self.V_Pic = Label(self.top, image=self.im)
         self.V_Pic.place(relx=0.1, rely=0.429, relwidth=0.097, relheight=0.053)
+        self.refresh_count += 1
+        if self.refresh_count == 3:
+            self.Log_info.insert(1.0, "验证码是真的，别再调戏验证码君啦o(*￣▽￣*)p\n")
+            self.Log_info.update()
 
     # 粘贴剪切板内容到StringVar
     def paste_info(self):
@@ -257,7 +262,7 @@ class QK(ModifyWindow):
     def log_location(self):
         location_url = self.LocationvalVar.get()
         self.qk.log_location(location_url)
-        self.Log_info.insert(1.0, '登陆中 请稍后...\n')
+        self.Log_info.insert(1.0, '登陆中 请稍候...\n')
         self.check_logsuc()
         # self.Login.update()
         if self.log_successfully:
@@ -325,6 +330,9 @@ class QK(ModifyWindow):
 # ------------------------------Check for update------------------------------
     def update_check(self):
 
+        self.Log_info.insert(1.0, '检察版本信息中，请稍候...\n')
+        self.Log_info.update()
+
         existence = path.exists("ver_info.zxg")
 
         if existence:
@@ -350,6 +358,8 @@ class QK(ModifyWindow):
                     self.Log_info.update()
                 elif cu.cloud_info_dict['version'] > local_info_dict['version'] \
                         or cu.cloud_info_dict['time'] > local_info_dict['time']:
+                    self.Log_info.insert(1.0, "程序有更新\n")
+                    self.Log_info.update()
                     upd = Tk()
                     upd.withdraw()
                     answer = messagebox.askokcancel('info', '程序有更新，是否前去下载？')
@@ -362,7 +372,39 @@ class QK(ModifyWindow):
 # ----------------------------------------------------------------------------
 
     def about_author(self):
-        pass
+        author = Toplevel()
+        author.geometry('425x250')
+        author.resizable(0, 0)
+        author.title('关于作者')
+        author_text = Label(author, text='作者说：现在下班，代码没问题！\n并朝你扔了一个Bug')
+        author_text.place(relx=0, rely=0)
+
+        photo_bug = PhotoImage(file="img\\bug.png")  # file：t图片路径
+        bug_imgLabel = Label(author, image=photo_bug)  # 把图片整合到标签类中
+        bug_imgLabel.pack(side=RIGHT)  # 自动对齐
+
+        photo_zhihu = PhotoImage(file='img\\zhihu.png')
+        zhihu_imgLabel = Label(author, image=photo_zhihu, cursor='hand2')
+        zhihu_imgLabel.place(relx=0.029, rely=0.25)
+        zhihu_imgLabel.bind("<Button-1>", lambda f: open_new("https://www.zhihu.com/people/qaucodingdog"))
+        zhihu_var = Label(author, text='我的知乎')
+        zhihu_var.place(relx=0.16, rely=0.29)
+
+        photo_weibo = PhotoImage(file='img\\weibo.png')
+        weibo_imgLabel = Label(author, image=photo_weibo, cursor='hand2')
+        weibo_imgLabel.place(relx=0.02, rely=0.5)
+        weibo_imgLabel.bind("<Button-1>", lambda g: open_new("https://weibo.com/codingdogzxg"))
+        weibo_var = Label(author, text='我的微博')
+        weibo_var.place(relx=0.16, rely=0.54)
+
+        photo_qq = PhotoImage(file='img\\qq.png')
+        qq_imgLabel = Label(author, image=photo_qq, cursor='hand2')
+        qq_imgLabel.place(relx=0.031, rely=0.75)
+        qq_imgLabel.bind("<Button-1>", lambda h: author.title('白嫖qq？门都没有！'))
+        qq_var = Label(author, text='我的QQ')
+        qq_var.place(relx=0.16, rely=0.8)
+
+        author.mainloop()
 
     def download_classes(self):
         pass
