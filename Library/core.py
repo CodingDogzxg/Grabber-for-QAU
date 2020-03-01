@@ -379,25 +379,25 @@ class QK(ModifyWindow):
         author_text = Label(author, text='作者说：现在下班，代码没问题！\n并朝你扔了一个Bug')
         author_text.place(relx=0, rely=0)
 
-        photo_bug = PhotoImage(file="img\\bug.png")  # file：t图片路径
+        photo_bug = PhotoImage(file="Library\\img\\bug.png")  # file：t图片路径
         bug_imgLabel = Label(author, image=photo_bug)  # 把图片整合到标签类中
         bug_imgLabel.pack(side=RIGHT)  # 自动对齐
 
-        photo_zhihu = PhotoImage(file='img\\zhihu.png')
+        photo_zhihu = PhotoImage(file='Library\\img\\zhihu.png')
         zhihu_imgLabel = Label(author, image=photo_zhihu, cursor='hand2')
         zhihu_imgLabel.place(relx=0.029, rely=0.25)
         zhihu_imgLabel.bind("<Button-1>", lambda f: open_new("https://www.zhihu.com/people/qaucodingdog"))
         zhihu_var = Label(author, text='我的知乎')
         zhihu_var.place(relx=0.16, rely=0.29)
 
-        photo_weibo = PhotoImage(file='img\\weibo.png')
+        photo_weibo = PhotoImage(file='Library\\img\\weibo.png')
         weibo_imgLabel = Label(author, image=photo_weibo, cursor='hand2')
         weibo_imgLabel.place(relx=0.02, rely=0.5)
         weibo_imgLabel.bind("<Button-1>", lambda g: open_new("https://weibo.com/codingdogzxg"))
         weibo_var = Label(author, text='我的微博')
         weibo_var.place(relx=0.16, rely=0.54)
 
-        photo_qq = PhotoImage(file='img\\qq.png')
+        photo_qq = PhotoImage(file='Library\\img\\qq.png')
         qq_imgLabel = Label(author, image=photo_qq, cursor='hand2')
         qq_imgLabel.place(relx=0.031, rely=0.75)
         qq_imgLabel.bind("<Button-1>", lambda h: author.title('白嫖qq？门都没有！'))
