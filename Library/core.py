@@ -410,7 +410,7 @@ class QK(ModifyWindow):
         pass
 
     def auto_evaluation(self):
-        pass
+        opennew("https://github.com/CodingDogzxg/QAUAutoEvaluater")
 
 
 class MyLabel(Label):
