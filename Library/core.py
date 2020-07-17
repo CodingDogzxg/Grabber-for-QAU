@@ -205,7 +205,7 @@ class QK(ModifyWindow):
         if self.log_successfully:
             self.Paste['state'] = 'disable'
             self.EnterLct['state'] = 'disable'
-
+            
     def check_score(self):
         score = Score()
         score_query_response = self.qk.session_check_score_query(score.query_url)
@@ -268,7 +268,6 @@ class QK(ModifyWindow):
         if self.log_successfully:
             self.Login['state'] = 'disable'
             self.Score['state'] = 'normal'
-            self.Evaluate['state'] = 'normal'
 
     # 检测是否登录成功
     def check_logsuc(self):
@@ -294,10 +293,14 @@ class QK(ModifyWindow):
             self.user_name = xml_html.xpath('string(//*[@id="Top1_divLoginName"])')
             if self.user_name:
                 self.log_successfully = True
-                self.Score['state'] = 'normal'
                 self.master.title(self.master_title + '   {} 你好'.format(self.user_name))
                 self.Log_info.insert(1.0, '登陆成功 \n')
                 self.Log_info.update()
+
+                # 共享的state在这里设置一次便可
+                self.Score['state'] = 'normal'
+                self.Evaluate['state'] = 'normal'
+
         except UnicodeDecodeError:
             self.Log_info.insert(1.0, '登陆失败 请检查账户密码无误后重试 \n')
             self.Log_info.update()
