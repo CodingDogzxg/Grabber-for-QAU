@@ -268,6 +268,7 @@ class QK(ModifyWindow):
         if self.log_successfully:
             self.Login['state'] = 'disable'
             self.Score['state'] = 'normal'
+            self.Evaluate['state'] = 'normal'
 
     # 检测是否登录成功
     def check_logsuc(self):
