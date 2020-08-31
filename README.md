@@ -1,6 +1,6 @@
 # 由于本人选修课学分已修满 不再对此软件进行维护 如果你有Python, HTTP(s), 爬虫等相关知识 并恰巧对此项目有兴趣 [请联系我](mailto:codingdogzxg@gmail.com) 我将解释源码意义并提供技术指导
 ---
---19/12/29 代码完成 这个版本可以用啦~ 下载地址：[Windows蓝奏云镜像(推荐)](https://wwe.lanzous.com/iFzOkg8h1li) . [Windows](https://codeload.github.com/CodingDogzxg/Grabber-for-QAU/zip/master)
+19/12/29 代码完成 这个版本可以用啦~ 下载地址：[Windows蓝奏云镜像(推荐)](https://wwe.lanzous.com/iFzOkg8h1li) . [Windows](https://codeload.github.com/CodingDogzxg/Grabber-for-QAU/zip/master)
 ---
 # QAU抢课 青农抢课软件 非按键精灵脚本
 # 建议不要放在C:运行 否则将产生cache以及权限问题
