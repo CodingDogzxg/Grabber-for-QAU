@@ -78,10 +78,10 @@ class ModifyWindow(Frame):
 
         self.Log_info = Text(self.top)
         self.Log_info.place(relx=0, rely=0.747, relwidth=0.565, relheight=0.23)
-        scrollbar = Scrollbar(self.Log_info, cursor='arrow', orient=VERTICAL)
-        scrollbar.pack(fill=Y, side=RIGHT)
-        scrollbar.config(command=self.Log_info.yview)
-        self.Log_info['yscrollcommand'] = scrollbar.set  # 绑定滑块和LOG的位置
+        Log_info_scrollbar = Scrollbar(self.Log_info, cursor='arrow', orient=VERTICAL)
+        Log_info_scrollbar.pack(fill=Y, side=RIGHT)
+        Log_info_scrollbar.config(command=self.Log_info.yview)
+        self.Log_info['yscrollcommand'] = Log_info_scrollbar.set  # 绑定滑块和LOG的位置
         self.Log_info.update()
 
         # -----------------------------------------------------------------------
@@ -110,11 +110,49 @@ class ModifyWindow(Frame):
 
         self.Email = Label(self.top, text='联系作者', fg='blue', bg='white', cursor='hand2')
         self.Email.place(relx=0.476, rely=0.933, relwidth=0.089, relheight=0.044)
-        self.Email.bind("<Button-1>", lambda e: open_new("mailto:qaucodingdog@gmail.com"))
+        self.Email.bind("<Button-1>", lambda e: open_new("mailto:codingdogzxg@gmail.com"))
 
         self.Check_ud = Label(self.top, text='检查更新', fg='blue', bg='white', cursor='hand2')
         self.Check_ud.place(relx=0.387, rely=0.933, relwidth=0.089, relheight=0.044)
         self.Check_ud.bind("<Button-1>", lambda d: self.update_check())
+
+        # -----------------------------------------------------------------------------
+        self.Qk_log = Label(self.top, text='抢课Log:')
+        self.Qk_log.place(relx=0.478, rely=0, relwidth=0.089, relheight=0.053)
+
+        self.Qk_log_info = Text(self.top)
+        self.Qk_log_info.place(relx=0.478, rely=0.053, relwidth=0.51, relheight=0.4)
+        Qk_log_info_scrollbar = Scrollbar(self.Qk_log_info, cursor='arrow', orient=VERTICAL)
+        Qk_log_info_scrollbar.pack(fill=Y, side=RIGHT)
+        Qk_log_info_scrollbar.config(command=self.Qk_log_info.yview)
+        self.Qk_log_info['yscrollcommand'] = Qk_log_info_scrollbar.set  # 绑定滑块和LOG的位置
+        self.Qk_log_info.update()
+
+        self.Selection_1 = IntVar()
+        self.Selection1 = Checkbutton(top, text="不抢海院", variable=self.Selection_1)
+        self.Selection1.place(relx=0.478, rely=0.462, relwidth=0.12, relheight=0.053)
+
+        self.Selection_2 = IntVar()
+        self.Selection2 = Checkbutton(top, text="只抢海院", variable=self.Selection_2)
+        self.Selection2.place(relx=0.671, rely=0.462, relwidth=0.12, relheight=0.053)
+
+        self.Selection_3 = IntVar()
+        self.Selection3 = Checkbutton(top, text="只抢通识", variable=self.Selection_3)
+        self.Selection3.place(relx=0.864, rely=0.462, relwidth=0.12, relheight=0.053)
+
+        self.Selection_4 = IntVar()
+        self.Selection4 = Checkbutton(top, text="计时关闭", variable=self.Selection_4)
+        self.Selection4.place(relx=0.478, rely=0.524, relwidth=0.12, relheight=0.053)
+
+        self.Selection_5 = IntVar()
+        self.Selection5 = Checkbutton(top, text="抢够关闭", variable=self.Selection_5)
+        self.Selection5.place(relx=0.671, rely=0.524, relwidth=0.12, relheight=0.053)
+
+        self.Start_qk = Button(self.top, text='开始抢课', command=self.start_qk)
+        self.Start_qk.place(relx=0.478, rely=0.6, relwidth=0.129, relheight=0.09)
+        self.Start_qk['state'] = 'disable'
+
+        # -----------------------------------------------------------------------------
 
         self.Classes = Button(self.top, text='课表下载', command=self.download_classes)
         self.Classes['state'] = 'disable'
@@ -158,6 +196,7 @@ class QK(ModifyWindow):
                 self.dumped = True
         except FileNotFoundError:
             self.dumped = False
+
 
     # 登陆按钮的target
     def login_cmd(self):
@@ -373,6 +412,17 @@ class QK(ModifyWindow):
         else:
             self.Log_info.insert(1.0, "版本信息文件未找到，请前往官网查看是否有更新\n")
             self.Log_info.update()
+
+# ------------------------------抢课核心代码-------------------------------------
+
+    def start_qk(self):
+        selections = [self.Selection_1.get() == 1, self.Selection_2.get() == 1, self.Selection_3.get() == 1]
+        selections2 = [self.Selection_4.get() == 1, self.Selection_5.get() == 1]
+        if selections2[0] or selections2[1]:
+            pass  # open a new window and ask
+        # self.Qk.start_qk(time=None, score=None)
+        self.Start_qk['text'] = '停止抢课' if self.Start_qk['text'] == '开始抢课' else '开始抢课'
+
 # ----------------------------------------------------------------------------
 
     def about_author(self):
