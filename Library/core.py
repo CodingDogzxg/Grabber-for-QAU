@@ -373,7 +373,7 @@ class QK(ModifyWindow):
 # ------------------------------Check for update------------------------------
     def update_check(self):
 
-        self.Log_info.insert(1.0, '检察版本信息中，请稍候...\n')
+        self.Log_info.insert(1.0, '检查版本信息中，请稍候...\n')
         self.Log_info.update()
 
         existence = path.exists("ver_info.zxg")
@@ -420,7 +420,9 @@ class QK(ModifyWindow):
         selections2 = [self.Selection_4.get() == 1, self.Selection_5.get() == 1]
         if selections2[0] or selections2[1]:
             pass  # open a new window and ask
-        # self.Qk.start_qk(time=None, score=None)
+        # 公选/通识询问 在重构模块qkcore里写session 然后调用方法
+        # self.Qk.start_qk(time=None, score=None, class=None, hai_yuan=None, )
+        # 思路:while循环 get url -> xpath etree提取关键词以及url2 -> get url2 -> time.sleep()
         self.Start_qk['text'] = '停止抢课' if self.Start_qk['text'] == '开始抢课' else '开始抢课'
 
 # ----------------------------------------------------------------------------
